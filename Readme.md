@@ -1,7 +1,7 @@
 # Личный проект «Пиксель хантер» [![Build status][travis-image]][travis-url]
 
 * Студент: [Валентин Багадин](https://up.htmlacademy.ru/ecmascript/7/user/291585).
-* Наставник: `Неизвестно`.
+* Наставник: [Борис Мудрук](https://up.htmlacademy.ru/ecmascript/7/user/855791).
 
 ---
 
