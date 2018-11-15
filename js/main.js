@@ -19,9 +19,11 @@ const showScreen = (index) => {
 let currentScreen = 1;
 
 const selectScreen = (index) => {
-  index = index < 0 ? 0 : index;
-  index = index >= screens.length ? screens.length - 1 : index;
-  currentScreen = index;
+  if (index !== currentScreen) {
+    index = index < 0 ? 0 : index;
+    index = index >= screens.length ? screens.length - 1 : index;
+    currentScreen = index;
+  }
   showScreen(index);
 };
 
@@ -36,7 +38,6 @@ document.addEventListener(`keydown`, (evt) => {
   }
 });
 
-const bodyElement = document.querySelector(`body`);
 const arrowsWrap = `<div class="arrows__wrap">
   <style>
     .arrows__wrap {
@@ -55,9 +56,9 @@ const arrowsWrap = `<div class="arrows__wrap">
   <button class="arrows__btn">-></button>
   </div>`;
 
-bodyElement.insertAdjacentHTML(`beforeEnd`, arrowsWrap);
+document.body.insertAdjacentHTML(`beforeEnd`, arrowsWrap);
 
-const arrows = bodyElement.querySelectorAll(`.arrows__btn`);
+const arrows = document.querySelectorAll(`.arrows__btn`);
 
 arrows[0].addEventListener(`click`, () => {
   selectScreen(currentScreen - 1);
