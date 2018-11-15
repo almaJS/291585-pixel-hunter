@@ -19,12 +19,12 @@ const showScreen = (index) => {
 let currentScreen = 1;
 
 const selectScreen = (index) => {
+  index = index < 0 ? 0 : index;
+  index = index >= screens.length ? screens.length - 1 : index;
   if (index !== currentScreen) {
-    index = index < 0 ? 0 : index;
-    index = index >= screens.length ? screens.length - 1 : index;
     currentScreen = index;
+    showScreen(index);
   }
-  showScreen(index);
 };
 
 document.addEventListener(`keydown`, (evt) => {
