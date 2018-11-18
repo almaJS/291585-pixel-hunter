@@ -164,7 +164,7 @@
 
   backToScreen(statsElement);
 
-  const game3Element = getElement(`
+  const gameThreePictureElement = getElement(`
   <header class="header">
     <button class="back">
       <span class="visually-hidden">Вернуться к началу</span>
@@ -209,15 +209,15 @@
     </ul>
   </section>`);
 
-  backToScreen(game3Element);
+  backToScreen(gameThreePictureElement);
 
-  const allGameOptions = game3Element.querySelectorAll(`.game__option`);
+  const allGameOptions = gameThreePictureElement.querySelectorAll(`.game__option`);
 
   const onGameOptionClick = () => showScreen(statsElement);
 
   allGameOptions.forEach((gameOption) => gameOption.addEventListener(`click`, onGameOptionClick));
 
-  const game2Element = getElement(`
+  const gameOnePictureElement = getElement(`
   <header class="header">
     <button class="back">
       <span class="visually-hidden">Вернуться к началу</span>
@@ -264,21 +264,21 @@
     </ul>
   </section>`);
 
-  backToScreen(game2Element);
+  backToScreen(gameOnePictureElement);
 
-  const form = game2Element.querySelector(`.game__content`);
-  const gameAnswers = game2Element.querySelectorAll(`input[name="question1"]`);
+  const form = gameOnePictureElement.querySelector(`.game__content`);
+  const gameAnswers = gameOnePictureElement.querySelectorAll(`input[name="question1"]`);
 
   const onAnswerChange = () => {
     if (getRadioInputsState(gameAnswers)) {
-      showScreen(game3Element);
+      showScreen(gameThreePictureElement);
       form.reset();
     }
   };
 
   gameAnswers.forEach((answer) => answer.addEventListener(`change`, onAnswerChange));
 
-  const game1Element = getElement(`
+  const gameTwoPictureElement = getElement(`
   <header class="header">
     <button class="back">
       <span class="visually-hidden">Вернуться к началу</span>
@@ -336,17 +336,17 @@
     </ul>
   </section>`);
 
-  backToScreen(game1Element);
+  backToScreen(gameTwoPictureElement);
 
-  const form$1 = game1Element.querySelector(`.game__content`);
-  const q1Inputs = game1Element.querySelectorAll(`input[name="question1"]`);
-  const q2Inputs = game1Element.querySelectorAll(`input[name="question2"]`);
+  const form$1 = gameTwoPictureElement.querySelector(`.game__content`);
+  const q1Inputs = gameTwoPictureElement.querySelectorAll(`input[name="question1"]`);
+  const q2Inputs = gameTwoPictureElement.querySelectorAll(`input[name="question2"]`);
 
   const onFormChange = (evt) => {
     if (evt.target.type === `radio`) {
 
       if (getRadioInputsState(q1Inputs) && getRadioInputsState(q2Inputs)) {
-        showScreen(game2Element);
+        showScreen(gameOnePictureElement);
         form$1.reset();
       }
     }
@@ -389,18 +389,12 @@
   const rulesButton = rulesElement.querySelector(`.rules__button`);
 
   const onRulesInputChange = () => {
-    const rulesInputValue = rulesInput.value;
-
-    if (rulesInputValue.length > 0) {
-      rulesButton.disabled = false;
-    } else {
-      rulesButton.disabled = true;
-    }
+    rulesButton.disabled = rulesInput.value ? false : true;
   };
 
   const onRulesButtonClick = (evt) => {
     evt.preventDefault();
-    showScreen(game1Element);
+    showScreen(gameTwoPictureElement);
   };
 
   rulesInput.addEventListener(`input`, onRulesInputChange);
@@ -430,9 +424,7 @@
 
   const greetingContinue = greetingElement$1.querySelector(`.greeting__continue`);
 
-  greetingContinue.addEventListener(`click`, () => {
-    showScreen(rulesElement);
-  });
+  greetingContinue.addEventListener(`click`, () => showScreen(rulesElement));
 
   setGreetingElement(greetingElement$1);
 
