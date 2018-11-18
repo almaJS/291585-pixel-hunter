@@ -1,7 +1,7 @@
 import {getElement, showScreen, getRadioInputsState, backToScreen} from './util.js';
-import game2Element from './game-2-screen.js';
+import gameOnePictureElement from './game-one-picture-screen.js';
 
-const game1Element = getElement(`
+const gameTwoPictureElement = getElement(`
   <header class="header">
     <button class="back">
       <span class="visually-hidden">Вернуться к началу</span>
@@ -59,17 +59,17 @@ const game1Element = getElement(`
     </ul>
   </section>`);
 
-backToScreen(game1Element);
+backToScreen(gameTwoPictureElement);
 
-const form = game1Element.querySelector(`.game__content`);
-const q1Inputs = game1Element.querySelectorAll(`input[name="question1"]`);
-const q2Inputs = game1Element.querySelectorAll(`input[name="question2"]`);
+const form = gameTwoPictureElement.querySelector(`.game__content`);
+const q1Inputs = gameTwoPictureElement.querySelectorAll(`input[name="question1"]`);
+const q2Inputs = gameTwoPictureElement.querySelectorAll(`input[name="question2"]`);
 
 const onFormChange = (evt) => {
   if (evt.target.type === `radio`) {
 
     if (getRadioInputsState(q1Inputs) && getRadioInputsState(q2Inputs)) {
-      showScreen(game2Element);
+      showScreen(gameOnePictureElement);
       form.reset();
     }
   }
@@ -77,4 +77,4 @@ const onFormChange = (evt) => {
 
 form.addEventListener(`change`, onFormChange);
 
-export default game1Element;
+export default gameTwoPictureElement;

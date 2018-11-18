@@ -1,5 +1,5 @@
 import {getElement, showScreen, backToScreen} from './util.js';
-import game1Element from './game-1-screen.js';
+import gameTwoPictureElement from './game-two-picture-screen.js';
 
 const rulesElement = getElement(`
   <header class="header">
@@ -36,18 +36,12 @@ const rulesInput = rulesElement.querySelector(`.rules__input`);
 const rulesButton = rulesElement.querySelector(`.rules__button`);
 
 const onRulesInputChange = () => {
-  const rulesInputValue = rulesInput.value;
-
-  if (rulesInputValue.length > 0) {
-    rulesButton.disabled = false;
-  } else {
-    rulesButton.disabled = true;
-  }
+  rulesButton.disabled = rulesInput.value ? false : true;
 };
 
 const onRulesButtonClick = (evt) => {
   evt.preventDefault();
-  showScreen(game1Element);
+  showScreen(gameTwoPictureElement);
 };
 
 rulesInput.addEventListener(`input`, onRulesInputChange);

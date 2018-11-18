@@ -25,8 +25,6 @@ const greetingElement = getElement(`
 
 const greetingContinue = greetingElement.querySelector(`.greeting__continue`);
 
-greetingContinue.addEventListener(`click`, () => {
-  showScreen(rulesElement);
-});
+greetingContinue.addEventListener(`click`, () => showScreen(rulesElement));
 
 export default greetingElement;
