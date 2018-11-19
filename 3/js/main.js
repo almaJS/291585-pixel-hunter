@@ -211,11 +211,22 @@
 
   backToScreen(gameThreePictureElement);
 
-  const allGameOptions = gameThreePictureElement.querySelectorAll(`.game__option`);
+  const form = gameThreePictureElement.querySelector(`.game__content`);
 
-  const onGameOptionClick = () => showScreen(statsElement);
+  const onFormClick = (evt) => {
+    let target = evt.target;
 
-  allGameOptions.forEach((gameOption) => gameOption.addEventListener(`click`, onGameOptionClick));
+    while (target !== form) {
+      if (target.classList.contains(`game__option`)) {
+        showScreen(statsElement);
+        return;
+      }
+
+      target = target.parentNode;
+    }
+  };
+
+  form.addEventListener(`click`, onFormClick);
 
   const gameOnePictureElement = getElement(`
   <header class="header">
@@ -266,17 +277,20 @@
 
   backToScreen(gameOnePictureElement);
 
-  const form = gameOnePictureElement.querySelector(`.game__content`);
+  const form$1 = gameOnePictureElement.querySelector(`.game__content`);
   const gameAnswers = gameOnePictureElement.querySelectorAll(`input[name="question1"]`);
 
-  const onAnswerChange = () => {
-    if (getRadioInputsState(gameAnswers)) {
-      showScreen(gameThreePictureElement);
-      form.reset();
+  const onFormChange = (evt) => {
+    if (evt.target.type === `radio`) {
+
+      if (getRadioInputsState(gameAnswers)) {
+        showScreen(gameThreePictureElement);
+        form$1.reset();
+      }
     }
   };
 
-  gameAnswers.forEach((answer) => answer.addEventListener(`change`, onAnswerChange));
+  form$1.addEventListener(`change`, onFormChange);
 
   const gameTwoPictureElement = getElement(`
   <header class="header">
@@ -338,21 +352,21 @@
 
   backToScreen(gameTwoPictureElement);
 
-  const form$1 = gameTwoPictureElement.querySelector(`.game__content`);
+  const form$2 = gameTwoPictureElement.querySelector(`.game__content`);
   const q1Inputs = gameTwoPictureElement.querySelectorAll(`input[name="question1"]`);
   const q2Inputs = gameTwoPictureElement.querySelectorAll(`input[name="question2"]`);
 
-  const onFormChange = (evt) => {
+  const onFormChange$1 = (evt) => {
     if (evt.target.type === `radio`) {
 
       if (getRadioInputsState(q1Inputs) && getRadioInputsState(q2Inputs)) {
         showScreen(gameOnePictureElement);
-        form$1.reset();
+        form$2.reset();
       }
     }
   };
 
-  form$1.addEventListener(`change`, onFormChange);
+  form$2.addEventListener(`change`, onFormChange$1);
 
   const rulesElement = getElement(`
   <header class="header">
@@ -389,7 +403,7 @@
   const rulesButton = rulesElement.querySelector(`.rules__button`);
 
   const onRulesInputChange = () => {
-    rulesButton.disabled = rulesInput.value ? false : true;
+    rulesButton.disabled = !rulesInput.value;
   };
 
   const onRulesButtonClick = (evt) => {
