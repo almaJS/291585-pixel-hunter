@@ -36,7 +36,7 @@ const rulesInput = rulesElement.querySelector(`.rules__input`);
 const rulesButton = rulesElement.querySelector(`.rules__button`);
 
 const onRulesInputChange = () => {
-  rulesButton.disabled = rulesInput.value ? false : true;
+  rulesButton.disabled = !rulesInput.value;
 };
 
 const onRulesButtonClick = (evt) => {

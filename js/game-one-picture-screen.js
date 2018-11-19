@@ -53,13 +53,16 @@ backToScreen(gameOnePictureElement);
 const form = gameOnePictureElement.querySelector(`.game__content`);
 const gameAnswers = gameOnePictureElement.querySelectorAll(`input[name="question1"]`);
 
-const onAnswerChange = () => {
-  if (getRadioInputsState(gameAnswers)) {
-    showScreen(gameThreePictureElement);
-    form.reset();
+const onFormChange = (evt) => {
+  if (evt.target.type === `radio`) {
+
+    if (getRadioInputsState(gameAnswers)) {
+      showScreen(gameThreePictureElement);
+      form.reset();
+    }
   }
 };
 
-gameAnswers.forEach((answer) => answer.addEventListener(`change`, onAnswerChange));
+form.addEventListener(`change`, onFormChange);
 
 export default gameOnePictureElement;

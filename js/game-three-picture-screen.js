@@ -48,10 +48,21 @@ const gameThreePictureElement = getElement(`
 
 backToScreen(gameThreePictureElement);
 
-const allGameOptions = gameThreePictureElement.querySelectorAll(`.game__option`);
+const form = gameThreePictureElement.querySelector(`.game__content`);
 
-const onGameOptionClick = () => showScreen(statsElement);
+const onFormClick = (evt) => {
+  let target = evt.target;
 
-allGameOptions.forEach((gameOption) => gameOption.addEventListener(`click`, onGameOptionClick));
+  while (target !== form) {
+    if (target.classList.contains(`game__option`)) {
+      showScreen(statsElement);
+      return;
+    }
+
+    target = target.parentNode;
+  }
+};
+
+form.addEventListener(`click`, onFormClick);
 
 export default gameThreePictureElement;
