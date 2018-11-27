@@ -1,15 +1,13 @@
 import {NUMBER_OF_ANSWERS} from './count-result.js';
 
 export const changeLevel = (state, level) => {
-  const newState = Object.assign({}, state);
+  let newLevel = level;
 
   if (level < 0) {
-    newState.level = 0;
+    newLevel = 0;
   } else if (level > NUMBER_OF_ANSWERS) {
-    newState.level = NUMBER_OF_ANSWERS;
-  } else {
-    newState.level = level;
+    newLevel = NUMBER_OF_ANSWERS;
   }
 
-  return newState;
+  return Object.assign({}, state, {level: newLevel});
 };

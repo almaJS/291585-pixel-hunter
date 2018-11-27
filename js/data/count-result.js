@@ -11,23 +11,21 @@ export const countResult = (answers, lives) => {
     return -1;
   }
 
-  let sumOfPoints = 0;
+  let sumOfPoints = LIFE_POINTS * lives;
 
-  answers.forEach((answer) => {
-    if (answer.result) {
-      sumOfPoints += NORMAL_POINTS;
-
-      if (answer.time < FAST_TIME) {
-        sumOfPoints += FAST_POINTS;
-      }
-
-      if (answer.time > SLOW_TIME) {
-        sumOfPoints -= SLOW_POINTS;
-      }
+  sumOfPoints = answers.reduce((accumulator, answer) => {
+    if (!answer.result) {
+      return accumulator;
     }
-  });
 
-  sumOfPoints += LIFE_POINTS * lives;
+    if (answer.time < FAST_TIME) {
+      accumulator += FAST_POINTS;
+    } else if (answer.time > SLOW_TIME) {
+      accumulator -= SLOW_POINTS;
+    }
+
+    return accumulator + NORMAL_POINTS;
+  }, sumOfPoints);
 
   return sumOfPoints;
 };
