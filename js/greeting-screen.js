@@ -1,7 +1,7 @@
 import {getElement, showScreen} from './util.js';
 import rulesElement from './rules-screen.js';
 
-const greetingElement = getElement(`
+const template = `
   <section class="greeting central--blur">
     <img class="greeting__logo" src="img/logo_ph-big.svg" width="201" height="89" alt="Pixel Hunter">
     <div class="greeting__asterisk asterisk"><span class="visually-hidden">Я просто красивая звёздочка</span>*</div>
@@ -21,7 +21,9 @@ const greetingElement = getElement(`
         <use xlink:href="img/sprite.svg#arrow-right"></use>
       </svg>
     </button>
-  </section>`);
+  </section>`;
+
+const greetingElement = getElement(template);
 
 const greetingContinue = greetingElement.querySelector(`.greeting__continue`);
 

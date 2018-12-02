@@ -1,6 +1,6 @@
 import {assert} from 'chai';
 import {reduceCountdown} from './reduce-countdown.js';
-import {INITIAL_STATE} from './game-data.js';
+import INITIAL_STATE from './game-data.js';
 
 describe(`Check countdown timer`, () => {
 

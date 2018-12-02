@@ -1,5 +1,5 @@
-import {getElement, showScreen, backToScreen} from './util.js';
-import gameTwoPictureElement from './game-two-picture-screen.js';
+import {getElement, backToScreen} from './util.js';
+import startGame from './start-game.js';
 
 const rulesElement = getElement(`
   <header class="header">
@@ -41,7 +41,7 @@ const onRulesInputChange = () => {
 
 const onRulesButtonClick = (evt) => {
   evt.preventDefault();
-  showScreen(gameTwoPictureElement);
+  startGame();
 };
 
 rulesInput.addEventListener(`input`, onRulesInputChange);
