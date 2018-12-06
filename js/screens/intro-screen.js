@@ -1,4 +1,4 @@
-import {getElement, showGreetingsScreen} from './util.js';
+import {getElement, showGreetingsScreen} from '../util.js';
 
 const introElement = getElement(`
   <section class="intro">

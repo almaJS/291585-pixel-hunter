@@ -1,4 +1,4 @@
-import {getElement, showScreen} from './util.js';
+import {getElement, showScreen} from '../util.js';
 import rulesElement from './rules-screen.js';
 
 const template = `

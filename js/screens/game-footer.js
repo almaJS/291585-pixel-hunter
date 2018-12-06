@@ -24,9 +24,10 @@ export default (state) => {
   }
 
   const template = `
-    <ul class="stats">
-      ${stats.join(``)}
-    </ul>`;
+      <ul class="stats">
+        ${stats.join(``)}
+      </ul>
+    </section>`;
 
   return template;
 };

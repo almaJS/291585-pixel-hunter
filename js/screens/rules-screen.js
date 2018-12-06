@@ -1,5 +1,5 @@
-import {getElement, backToScreen} from './util.js';
-import startGame from './start-game.js';
+import {getElement, setBackToGreetingsElement} from '../util.js';
+import startGame from '../start-game.js';
 
 const rulesElement = getElement(`
   <header class="header">
@@ -30,10 +30,10 @@ const rulesElement = getElement(`
     </form>
   </section>`);
 
-backToScreen(rulesElement);
-
 const rulesInput = rulesElement.querySelector(`.rules__input`);
 const rulesButton = rulesElement.querySelector(`.rules__button`);
+
+setBackToGreetingsElement(rulesElement);
 
 const onRulesInputChange = () => {
   rulesButton.disabled = !rulesInput.value;

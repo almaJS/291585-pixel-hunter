@@ -5,6 +5,7 @@ export const getElement = (template = ``) => {
 };
 
 let greetingElement;
+
 export const setGreetingElement = (element) => {
   greetingElement = element;
 };
@@ -18,7 +19,7 @@ export const showScreen = (element) => {
 
 export const showGreetingsScreen = () => showScreen(greetingElement);
 
-export const backToScreen = (currentScreen) => {
+export const setBackToGreetingsElement = (currentScreen) => {
   const backButton = currentScreen.querySelector(`.back`);
 
   backButton.addEventListener(`click`, () => showGreetingsScreen());

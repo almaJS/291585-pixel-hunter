@@ -17,53 +17,36 @@ const renderTableHeader = (result) => {
   return template;
 };
 
-const renderTableFast = (result) => {
+const renderTableTemplate = (count, points, type) => {
+  const TYPES_MAP = {
+    fast: `Бонус за скорость`,
+    slow: `Штраф за медлительность`,
+    lives: `Бонус за жизни`
+  };
+
+  return `
+    <tr>
+      <td></td>
+      <td class="result__extra">${TYPES_MAP[type]}:</td>
+      <td class="result__extra">${count} <span class="stats__result stats__result--${type}"></span></td>
+      <td class="result__points">× 50</td>
+      <td class="result__total">${points}</td>
+    </tr>`;
+};
+
+const renderTableStat = (result) => {
   let template = ``;
 
   if (result.isWinner && result.fast.count) {
-    template = `
-      <tr>
-        <td></td>
-        <td class="result__extra">Бонус за скорость:</td>
-        <td class="result__extra">${result.fast.count} <span class="stats__result stats__result--fast"></span></td>
-        <td class="result__points">× 50</td>
-      </tr>`;
+    template += renderTableTemplate(result.fast.count, result.fast.points, `fast`);
   }
-
-  return template;
-};
-
-const renderTableLife = (result) => {
-  let template = ``;
 
   if (result.isWinner && result.lives.count) {
-    template = `
-      <tr>
-        <td></td>
-        <td class="result__extra">Бонус за жизни:</td>
-        <td class="result__extra">${result.lives.count} <span class="stats__result stats__result--alive"></span></td>
-        <td class="result__points">× 50</td>
-        <td class="result__total">${result.lives.points}</td>
-      </tr>
-    `;
+    template += renderTableTemplate(result.lives.count, result.lives.points, `lives`);
   }
 
-  return template;
-};
-
-const renderTableSlow = (result) => {
-  let template = ``;
-
   if (result.isWinner && result.slow.count) {
-    template = `
-      <tr>
-        <td></td>
-        <td class="result__extra">Штраф за медлительность:</td>
-        <td class="result__extra">${result.slow.count} <span class="stats__result stats__result--slow"></span></td>
-        <td class="result__points">× 50</td>
-        <td class="result__total">${result.slow.points}</td>
-      </tr>
-    `;
+    template += renderTableTemplate(result.slow.count, result.slow.points, `slow`);
   }
 
   return template;
@@ -93,9 +76,7 @@ export default (state, result) => {
         </td>
         ${renderTableHeader(result)}
 
-      ${renderTableFast(result)}
-      ${renderTableLife(result)}
-      ${renderTableSlow(result)}
+      ${renderTableStat(result)}
       ${renderTableTotal(result)}
     </table>`;
 

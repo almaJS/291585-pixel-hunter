@@ -1,7 +1,8 @@
-import {getElement, backToScreen, showScreen} from './util.js';
+import {getElement, setBackToGreetingsElement, showScreen} from './util.js';
 import INITIAL_STATE from './data/game-data.js';
 import gameHeader from './screens/game-header.js';
 import gameScreen from './screens/game-screen.js';
+import gameFooter from './screens/game-footer.js';
 import templates from './data/game-templates.js';
 import statsElement from './screens/stats-screen.js';
 
@@ -13,9 +14,11 @@ const startGame = () => {
   const gameContainerElement = getElement();
   const headerElement = getElement();
   const gameElement = getElement();
+  const footerElement = getElement();
 
   gameContainerElement.appendChild(headerElement);
   gameContainerElement.appendChild(gameElement);
+  gameContainerElement.appendChild(footerElement);
 
   const updateGame = (state) => {
     if (state.level < 0 || state.lives <= 0) {
@@ -27,8 +30,9 @@ const startGame = () => {
 
     headerElement.innerHTML = gameHeader(state.time, state.lives);
     gameElement.innerHTML = gameScreen(state);
+    footerElement.innerHTML = gameFooter(state);
 
-    backToScreen(headerElement);
+    setBackToGreetingsElement(headerElement);
     templates[templateName].setListener(gameElement, state, updateGame);
   };
 
