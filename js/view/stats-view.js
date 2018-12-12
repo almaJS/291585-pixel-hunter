@@ -1,4 +1,5 @@
-import gameFooter from './game-footer.js';
+import AbstractView from "./abstract-view.js";
+import GameFooterView from '../view/game-footer-view.js';
 
 const renderTableHeader = (result) => {
   let template;
@@ -66,13 +67,14 @@ const renderTableTotal = (result) => {
   return template;
 };
 
-export default (state, result) => {
+const renderResultTable = (state, result) => {
+  const gameFooterView = new GameFooterView(state);
   const template = `
     <table class="result__table">
       <tr>
         <td class="result__number">1.</td>
         <td colspan="2">
-          ${gameFooter(state)}
+          ${gameFooterView.template}
         </td>
         ${renderTableHeader(result)}
 
@@ -82,3 +84,35 @@ export default (state, result) => {
 
   return template;
 };
+
+const renderTitle = (result) => {
+  return result.isWinner ? `Победа!` : `Поражение`;
+};
+
+export default class StatsView extends AbstractView {
+  constructor(state, gameResult) {
+    super();
+    this.state = state;
+    this.gameResult = gameResult;
+  }
+
+  get template() {
+
+    return `
+      <header class="header">
+        <button class="back">
+          <span class="visually-hidden">Вернуться к началу</span>
+          <svg class="icon" width="45" height="45" viewBox="0 0 45 45" fill="#000000">
+            <use xlink:href="img/sprite.svg#arrow-left"></use>
+          </svg>
+          <svg class="icon" width="101" height="44" viewBox="0 0 101 44" fill="#000000">
+            <use xlink:href="img/sprite.svg#logo-small"></use>
+          </svg>
+        </button>
+      </header>
+      <section class="result">
+        <h2 class="result__title">${renderTitle(this.gameResult)}</h2>
+          ${renderResultTable(this.state, this.gameResult)}
+      </section>`;
+  }
+}

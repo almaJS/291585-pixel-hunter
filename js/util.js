@@ -19,8 +19,8 @@ export const showScreen = (element) => {
 
 export const showGreetingsScreen = () => showScreen(greetingElement);
 
-export const setBackToGreetingsElement = (currentScreen) => {
-  const backButton = currentScreen.querySelector(`.back`);
+export const setBackToGreetingsElement = (element) => {
+  const backButton = element.querySelector(`.back`);
 
   backButton.addEventListener(`click`, () => showGreetingsScreen());
 };

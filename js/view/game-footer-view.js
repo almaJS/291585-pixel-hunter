@@ -1,4 +1,6 @@
-export default (state) => {
+import AbstractView from "./abstract-view";
+
+const getStatsTemplate = (state) => {
   const numberOfQuestions = state.questions.length;
   let stats = [];
 
@@ -31,3 +33,14 @@ export default (state) => {
 
   return template;
 };
+
+export default class GameFooterView extends AbstractView {
+  constructor(state) {
+    super();
+    this.state = state;
+  }
+
+  get template() {
+    return getStatsTemplate(this.state);
+  }
+}
