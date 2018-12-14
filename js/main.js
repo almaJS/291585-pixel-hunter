@@ -1,7 +1,9 @@
-import {showScreen, setGreetingElement} from './util.js';
-import introElement from './screens/intro-screen.js';
-import greetingElement from './screens/greeting-screen.js';
+import {showScreen} from './util.js';
+import IntroView from './view/intro-view.js';
+import greetingScreen from './screens/greeting-screen.js';
 
-setGreetingElement(greetingElement);
+const introView = new IntroView();
 
-showScreen(introElement);
+introView.onClick = () => greetingScreen();
+
+showScreen(introView.element);
