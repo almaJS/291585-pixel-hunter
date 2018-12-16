@@ -1,4 +1,4 @@
-export const reduceCountdown = (state) => {
+export default (state) => {
   const newState = Object.assign({}, state);
 
   if (state.time < 0) {

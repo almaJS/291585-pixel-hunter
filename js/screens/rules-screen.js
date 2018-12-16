@@ -1,16 +1,23 @@
-import {setBackToGreetingsElement, showScreen} from '../util.js';
-import startGame from './game-screen.js';
 import RulesView from '../view/rules-view.js';
+import Application from '../application.js';
+import HeaderView from '../view/header-view.js';
 
-export default () => {
-  const rulesView = new RulesView();
+export default class RulesScreen {
+  constructor() {
+    this.header = new HeaderView();
+    this.content = new RulesView();
 
-  setBackToGreetingsElement(rulesView.element);
+    this.root = document.createElement(`div`);
+    this.root.appendChild(this.header.element);
+    this.root.appendChild(this.content.element);
 
-  rulesView.onClick = (evt) => {
-    evt.preventDefault();
-    startGame();
-  };
+    this.content.onClick = (evt, playerName) => {
+      evt.preventDefault();
+      Application.showGame(playerName);
+    };
+  }
 
-  showScreen(rulesView.element);
-};
+  get element() {
+    return this.root;
+  }
+}
