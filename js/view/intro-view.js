@@ -1,9 +1,9 @@
 import AbstractView from './abstract-view.js';
-import Application from '../application.js';
 
 export default class IntroView extends AbstractView {
-  constructor() {
+  constructor(showNextScreen) {
     super();
+    this.showNextScreen = showNextScreen;
   }
 
   get template() {
@@ -21,6 +21,6 @@ export default class IntroView extends AbstractView {
   }
 
   onClick() {
-    Application.showGreeting();
+    this.showNextScreen();
   }
 }

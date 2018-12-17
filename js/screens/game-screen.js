@@ -4,15 +4,16 @@ import GameFooterView from '../view/game-footer-view.js';
 import GameOnePictureView from '../view/game-one-picture-view.js';
 import GameTwoPictureView from '../view/game-two-picture-view.js';
 import GameThreePictureView from '../view/game-three-picture-view.js';
-import Application from '../application.js';
 
 const ONE_SECOND = 1000;
 
 export default class GameScreen {
-  constructor(model) {
+  constructor(model, showNextScreen, showModalConfirm) {
     this.model = model;
+    this.showNextScreen = showNextScreen;
+    this.showModalConfirm = showModalConfirm;
     this.gameContainerElement = getElement();
-    this.header = new HeaderView(this.model.state.time, this.model.state.lives);
+    this.header = new HeaderView(this.showModalConfirm, this.model.state.time, this.model.state.lives);
     this.footer = new GameFooterView(this.model.state);
     this.level = this.getLevelView();
     this.gameContainerElement.appendChild(this.header.element);
@@ -32,7 +33,7 @@ export default class GameScreen {
   }
 
   stopGame() {
-    Application.showStat(this.model.state);
+    this.showNextScreen(this.model.state);
   }
 
   stopTimer() {
@@ -132,7 +133,7 @@ export default class GameScreen {
   }
 
   updateHeader() {
-    const header = new HeaderView(this.model.state.time, this.model.state.lives);
+    const header = new HeaderView(this.showModalConfirm, this.model.state.time, this.model.state.lives);
     this.gameContainerElement.replaceChild(header.element, this.header.element);
     this.header = header;
   }

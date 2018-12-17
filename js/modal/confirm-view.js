@@ -30,11 +30,11 @@ export default class ConfirmView extends AbstractView {
 
       while (target !== modalInner) {
         if (target.classList.contains(`modal__close`) || target.classList.contains(`modal__btn--cancel`)) {
-          this.onCloseClick();
+          this.onCloseClick(evt);
         }
 
         if (target.classList.contains(`modal__btn--ok`)) {
-          this.onOkClick();
+          this.onOkClick(evt);
         }
 
         target = target.parentNode;

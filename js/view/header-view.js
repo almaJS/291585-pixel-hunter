@@ -1,11 +1,11 @@
 import AbstractView from "./abstract-view.js";
-import Application from "../application.js";
 
 const MAX_NUMBER_OF_LIVES = 3;
 
 export default class HeaderView extends AbstractView {
-  constructor(time = null, lives = null) {
+  constructor(showModalConfirm, time = null, lives = null) {
     super();
+    this.showModalConfirm = showModalConfirm;
     this.time = time;
     this.lives = lives;
   }
@@ -48,6 +48,6 @@ export default class HeaderView extends AbstractView {
   }
 
   onClick() {
-    Application.showModalConfirm();
+    this.showModalConfirm();
   }
 }

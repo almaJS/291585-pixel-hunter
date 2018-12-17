@@ -1,10 +1,9 @@
 import RulesView from '../view/rules-view.js';
-import Application from '../application.js';
 import HeaderView from '../view/header-view.js';
 
 export default class RulesScreen {
-  constructor() {
-    this.header = new HeaderView();
+  constructor(showNextScreen, showModalConfirm) {
+    this.header = new HeaderView(showModalConfirm);
     this.content = new RulesView();
 
     this.root = document.createElement(`div`);
@@ -13,7 +12,7 @@ export default class RulesScreen {
 
     this.content.onClick = (evt, playerName) => {
       evt.preventDefault();
-      Application.showGame(playerName);
+      showNextScreen(playerName);
     };
   }
 

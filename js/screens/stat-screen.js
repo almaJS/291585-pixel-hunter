@@ -3,8 +3,8 @@ import StatsView from '../view/stat-view.js';
 import HeaderView from '../view/header-view.js';
 
 export default class StatScreen {
-  constructor(state) {
-    this.header = new HeaderView();
+  constructor(state, showModalConfirm) {
+    this.header = new HeaderView(showModalConfirm);
     this.content = new StatsView(state, getResult(state));
 
     this.root = document.createElement(`div`);

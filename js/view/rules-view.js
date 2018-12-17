@@ -1,5 +1,4 @@
 import AbstractView from './abstract-view.js';
-import Application from '../application.js';
 
 export default class RulesView extends AbstractView {
   constructor() {
@@ -36,8 +35,6 @@ export default class RulesView extends AbstractView {
     rulesButton.addEventListener(`click`, (evt) => this.onClick(evt, rulesInput.value));
   }
 
-  onClick(evt, playerName) {
-    evt.preventDefault();
-    Application.showGame(playerName);
+  onClick() {
   }
 }
