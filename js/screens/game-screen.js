@@ -4,16 +4,17 @@ import GameFooterView from '../view/game-footer-view.js';
 import GameOnePictureView from '../view/game-one-picture-view.js';
 import GameTwoPictureView from '../view/game-two-picture-view.js';
 import GameThreePictureView from '../view/game-three-picture-view.js';
+import Application from '../application.js';
 
 const ONE_SECOND = 1000;
+const QUARTER_SECOND = 250;
+const BLINK_TIME = 5;
 
 export default class GameScreen {
-  constructor(model, showNextScreen, showModalConfirm) {
+  constructor(model) {
     this.model = model;
-    this.showNextScreen = showNextScreen;
-    this.showModalConfirm = showModalConfirm;
     this.gameContainerElement = getElement();
-    this.header = new HeaderView(this.showModalConfirm, this.model.state.time, this.model.state.lives);
+    this.header = new HeaderView(this.model.state.time, this.model.state.lives);
     this.footer = new GameFooterView(this.model.state);
     this.level = this.getLevelView();
     this.gameContainerElement.appendChild(this.header.element);
@@ -21,6 +22,7 @@ export default class GameScreen {
     this.gameContainerElement.appendChild(this.footer.element);
 
     this._interval = null;
+    this._blinkInterval = null;
   }
 
   get element() {
@@ -33,14 +35,23 @@ export default class GameScreen {
   }
 
   stopGame() {
-    this.showNextScreen(this.model.state);
+    Application.showStat(this.model.state);
   }
 
   stopTimer() {
     clearInterval(this._interval);
+    clearInterval(this._blinkInterval);
+    this._blinkInterval = null;
   }
 
   checkTimer() {
+    if (this.model.state.time <= BLINK_TIME && !this._blinkInterval) {
+
+      this._blinkInterval = setInterval(() => {
+        this.header.blink();
+      }, QUARTER_SECOND);
+    }
+
     if (this.model.isEndOfTime()) {
       this.updateState();
     }
@@ -133,7 +144,7 @@ export default class GameScreen {
   }
 
   updateHeader() {
-    const header = new HeaderView(this.showModalConfirm, this.model.state.time, this.model.state.lives);
+    const header = new HeaderView(this.model.state.time, this.model.state.lives);
     this.gameContainerElement.replaceChild(header.element, this.header.element);
     this.header = header;
   }

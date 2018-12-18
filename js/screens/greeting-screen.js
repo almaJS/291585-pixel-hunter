@@ -1,10 +1,11 @@
 import GreetingView from '../view/greeting-view.js';
+import Application from '../application.js';
 
 export default class GreetingScreen {
-  constructor(showNextScreen) {
+  constructor() {
     this.greetingView = new GreetingView();
     this.greetingView.onClick = () => {
-      showNextScreen();
+      Application.showRules();
     };
   }
 

@@ -15,33 +15,33 @@ const showScreen = (element) => {
 
 export default class Application {
   static showIntro() {
-    const introView = new IntroView(Application.showGreeting);
+    const introView = new IntroView();
     showScreen(introView.element);
   }
 
   static showGreeting() {
-    const greetingScreen = new GreetingScreen(Application.showRules);
+    const greetingScreen = new GreetingScreen();
     showScreen(greetingScreen.element);
   }
 
   static showRules() {
-    const rulesScreen = new RulesScreen(Application.showGame, Application.showModalConfirm);
+    const rulesScreen = new RulesScreen();
     showScreen(rulesScreen.element);
   }
 
   static showGame(playerName) {
-    const gameScreen = new GameScreen(new GameModel(playerName), Application.showStat, Application.showModalConfirm);
+    const gameScreen = new GameScreen(new GameModel(playerName));
     showScreen(gameScreen.element);
     gameScreen.startGame();
   }
 
   static showStat(state) {
-    const statScreen = new StatScreen(state, Application.showModalConfirm);
+    const statScreen = new StatScreen(state);
     showScreen(statScreen.element);
   }
 
   static showModalConfirm() {
-    const confirmView = new ConfirmScreen(Application.showGreeting);
+    const confirmView = new ConfirmScreen();
     confirmView.open();
   }
 }

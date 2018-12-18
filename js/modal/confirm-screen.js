@@ -1,7 +1,8 @@
 import ConfirmView from "./confirm-view.js";
+import Application from "../application.js";
 
 export default class ConfirmScreen {
-  constructor(nextScreen) {
+  constructor() {
     this.confirmView = new ConfirmView();
     this.confirmView.onCloseClick = (evt) => {
       evt.preventDefault();
@@ -10,7 +11,7 @@ export default class ConfirmScreen {
     this.confirmView.onOkClick = (evt) => {
       evt.preventDefault();
       this.close();
-      nextScreen();
+      Application.showGreeting();
     };
   }
 

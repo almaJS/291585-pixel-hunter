@@ -1,11 +1,11 @@
 import AbstractView from "./abstract-view.js";
+import Application from "../application.js";
 
 const MAX_NUMBER_OF_LIVES = 3;
 
 export default class HeaderView extends AbstractView {
-  constructor(showModalConfirm, time = null, lives = null) {
+  constructor(time = null, lives = null) {
     super();
-    this.showModalConfirm = showModalConfirm;
     this.time = time;
     this.lives = lives;
   }
@@ -42,12 +42,26 @@ export default class HeaderView extends AbstractView {
   }
 
   bind() {
+    if (this.time !== null && this.lives !== null) {
+      this.blinkElement = this.element.querySelector(`.game__timer`);
+    }
+
     const backButton = this.element.querySelector(`.back`);
 
     backButton.addEventListener(`click`, () => this.onClick());
   }
 
+  blink() {
+    if (this.blinkElement) {
+      if (!this.blinkElement.style.color) {
+        this.blinkElement.style.color = `red`;
+      } else {
+        this.blinkElement.removeAttribute(`style`);
+      }
+    }
+  }
+
   onClick() {
-    this.showModalConfirm();
+    Application.showModalConfirm();
   }
 }
