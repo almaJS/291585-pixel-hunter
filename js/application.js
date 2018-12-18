@@ -4,7 +4,10 @@ import RulesScreen from "./screens/rules-screen.js";
 import GameScreen from "./screens/game-screen.js";
 import GameModel from "./data/game-model.js";
 import StatScreen from "./screens/stat-screen.js";
-import ConfirmScreen from "./modal/confirm-screen.js";
+import ConfirmScreen from "./modals/confirm-screen.js";
+import ErrorScreen from "./modals/error-screen.js";
+
+const LOAD_URL = `https://es.dump.academy/pixel-hunter/questions`;
 
 const mainElement = document.querySelector(`#main`);
 
@@ -13,10 +16,28 @@ const showScreen = (element) => {
   mainElement.appendChild(element);
 };
 
+const checkFetchStatus = (response) => {
+  if (response.status >= 200 && response.status < 300) {
+    return response;
+  } else {
+    throw new Error(`${response.status}`);
+  }
+};
+
+let gameData;
+
 export default class Application {
   static showIntro() {
     const introView = new IntroView();
     showScreen(introView.element);
+    window.fetch(LOAD_URL)
+      .then(checkFetchStatus)
+      .then((response) => response.json())
+      .then((data) => {
+        gameData = data;
+      })
+      .then(Application.showGreeting)
+      .catch(Application.showModalError);
   }
 
   static showGreeting() {
@@ -30,7 +51,7 @@ export default class Application {
   }
 
   static showGame(playerName) {
-    const gameScreen = new GameScreen(new GameModel(playerName));
+    const gameScreen = new GameScreen(new GameModel(gameData, playerName));
     showScreen(gameScreen.element);
     gameScreen.startGame();
   }
@@ -41,7 +62,12 @@ export default class Application {
   }
 
   static showModalConfirm() {
-    const confirmView = new ConfirmScreen();
-    confirmView.open();
+    const confirmScreen = new ConfirmScreen();
+    confirmScreen.open();
+  }
+
+  static showModalError() {
+    const errorScreen = new ErrorScreen();
+    errorScreen.open();
   }
 }

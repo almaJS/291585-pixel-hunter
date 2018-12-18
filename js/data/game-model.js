@@ -5,7 +5,8 @@ import setLevelStat from './set-level-stat.js';
 import reduceCountdown from './reduce-countdown.js';
 
 export default class GameModel {
-  constructor(playerName) {
+  constructor(gameData, playerName) {
+    this.model = gameData;
     this.playerName = playerName;
     this.restart();
   }
