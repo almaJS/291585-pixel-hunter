@@ -1,7 +1,8 @@
 export default (state) => {
-  const rightCounter = state.stats.filter((statValue) => statValue.result).length;
-  const fastCounter = state.stats.filter((statValue) => statValue.time < state.fastTime).length;
-  const slowCounter = state.stats.filter((statValue) => statValue.time > state.slowTime).length;
+  const rightAnswers = state.stats.filter((statValue) => statValue.result);
+  const rightCounter = rightAnswers.length;
+  const fastCounter = rightAnswers.filter((statValue) => statValue.time < state.fastTime).length;
+  const slowCounter = rightAnswers.filter((statValue) => statValue.time > state.slowTime).length;
 
   const result = {
     isWinner: state.questions.length === state.stats.length,

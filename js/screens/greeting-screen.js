@@ -1,12 +1,15 @@
-import {showScreen, setGreetingElement} from '../util.js';
-import rulesScreen from './rules-screen.js';
 import GreetingView from '../view/greeting-view.js';
+import Application from '../application.js';
 
-export default () => {
-  const greetingView = new GreetingView();
+export default class GreetingScreen {
+  constructor() {
+    this.greetingView = new GreetingView();
+    this.greetingView.onClick = () => {
+      Application.showRules();
+    };
+  }
 
-  greetingView.onClick = () => rulesScreen();
-
-  setGreetingElement(greetingView.element);
-  showScreen(greetingView.element);
-};
+  get element() {
+    return this.greetingView.element;
+  }
+}

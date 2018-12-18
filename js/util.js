@@ -4,25 +4,11 @@ export const getElement = (template = ``) => {
   return wrapper;
 };
 
-let greetingElement;
-
-export const setGreetingElement = (element) => {
-  greetingElement = element;
-};
-
 const mainElement = document.querySelector(`#main`);
 
 export const showScreen = (element) => {
   mainElement.innerHTML = ``;
   mainElement.appendChild(element);
-};
-
-export const showGreetingsScreen = () => showScreen(greetingElement);
-
-export const setBackToGreetingsElement = (element) => {
-  const backButton = element.querySelector(`.back`);
-
-  backButton.addEventListener(`click`, () => showGreetingsScreen());
 };
 
 export const getRadioInputValue = (elements) => {

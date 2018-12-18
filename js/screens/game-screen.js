@@ -1,109 +1,163 @@
-import {getElement, setBackToGreetingsElement, showScreen, getRadioInputValue} from '../util.js';
-import INITIAL_STATE from '../data/game-data.js';
-import statsScreen from './stats-screen.js';
-import {changeLevel} from '../data/change-level.js';
-import {reduceNumberOfLives} from '../data/reduce-lives.js';
-import setLevelStat from '../data/set-level-stat.js';
-import GameHeaderView from '../view/game-header-view.js';
+import {getElement, getRadioInputValue} from '../util.js';
+import HeaderView from '../view/header-view.js';
 import GameFooterView from '../view/game-footer-view.js';
 import GameOnePictureView from '../view/game-one-picture-view.js';
 import GameTwoPictureView from '../view/game-two-picture-view.js';
 import GameThreePictureView from '../view/game-three-picture-view.js';
+import Application from '../application.js';
 
-const TIME = 15;
+const ONE_SECOND = 1000;
+const QUARTER_SECOND = 250;
+const BLINK_TIME = 5;
 
-const gameContainerElement = getElement();
-const headerElement = getElement();
-const gameElement = getElement();
-const footerElement = getElement();
+export default class GameScreen {
+  constructor(model) {
+    this.model = model;
+    this.gameContainerElement = getElement();
+    this.header = new HeaderView(this.model.state.time, this.model.state.lives);
+    this.footer = new GameFooterView(this.model.state);
+    this.level = this.getLevelView();
+    this.gameContainerElement.appendChild(this.header.element);
+    this.gameContainerElement.appendChild(this.level.element);
+    this.gameContainerElement.appendChild(this.footer.element);
 
-gameContainerElement.appendChild(headerElement);
-gameContainerElement.appendChild(gameElement);
-gameContainerElement.appendChild(footerElement);
-
-const updateGame = (state) => {
-  if (state.level < 0 || state.lives <= 0) {
-    statsScreen(state);
-    return;
+    this._interval = null;
+    this._blinkInterval = null;
   }
 
-  const gameHeaderView = new GameHeaderView(state.time, state.lives);
-  const gameFooterView = new GameFooterView(state);
+  get element() {
+    return this.gameContainerElement;
+  }
 
-  const currentQuestion = state.questions[state.level - 1];
-  const templateName = currentQuestion.template;
+  startGame() {
+    this.model.restart();
+    this.updateGame();
+  }
 
-  gameContainerElement.innerHTML = ``;
-  gameContainerElement.appendChild(gameHeaderView.element);
+  stopGame() {
+    Application.showStat(this.model.state);
+  }
 
-  switch (templateName) {
-    case `onePicture`:
-      const gameOnePictureView = new GameOnePictureView(state);
-      gameContainerElement.appendChild(gameOnePictureView.element);
+  stopTimer() {
+    clearInterval(this._interval);
+    clearInterval(this._blinkInterval);
+    this._blinkInterval = null;
+  }
 
-      gameOnePictureView.onFormChange = (gameAnswers) => {
-        const answer = getRadioInputValue(gameAnswers);
+  checkTimer() {
+    if (this.model.state.time <= BLINK_TIME && !this._blinkInterval) {
 
-        if (answer) {
-          let isCorrect = answer === currentQuestion.answers[0];
-          updateState(state, isCorrect);
-        }
-      };
-      break;
+      this._blinkInterval = setInterval(() => {
+        this.header.blink();
+      }, QUARTER_SECOND);
+    }
 
-    case `twoPicture`:
-      const gameTwoPictureView = new GameTwoPictureView(state);
-      gameContainerElement.appendChild(gameTwoPictureView.element);
+    if (this.model.isEndOfTime()) {
+      this.updateState();
+    }
+  }
 
-      gameTwoPictureView.onFormChange = (q1Inputs, q2Inputs) => {
-        const answer1 = getRadioInputValue(q1Inputs);
-        const answer2 = getRadioInputValue(q2Inputs);
+  updateGame() {
 
-        if (answer1 && answer2) {
-          let isCorrect = true;
+    if (this.model.isEndOfGame()) {
+      this.stopGame();
+      return;
+    }
 
-          if (answer1 !== currentQuestion.answers[0] || answer2 !== currentQuestion.answers[1]) {
-            isCorrect = false;
+    this.updateHeader();
+    this.updateGameContent();
+    this.updateFooter();
+
+    this._interval = setInterval(() => {
+      this.model.tick();
+      this.updateHeader();
+      this.checkTimer();
+    }, ONE_SECOND);
+  }
+
+  updateState(isCorrect) {
+    this.stopTimer();
+
+    this.model.setLevelStat(isCorrect, this.model.state.time);
+    this.model.changeLevel(this.model.state, this.model.state.level + 1);
+
+    if (!isCorrect) {
+      this.model.reduceNumberOfLives();
+    }
+
+    this.updateGame();
+  }
+
+  getLevelView() {
+    const currentQuestion = this.model.state.questions[this.model.state.level - 1];
+    const templateName = currentQuestion.template;
+    let view;
+
+    switch (templateName) {
+      case `onePicture`:
+        const gameOnePictureView = new GameOnePictureView(this.model.state);
+
+        gameOnePictureView.onFormChange = (gameAnswers) => {
+          const answer = getRadioInputValue(gameAnswers);
+
+          if (answer) {
+            let isCorrect = answer === currentQuestion.answers[0];
+            this.updateState(isCorrect);
           }
+        };
+        view = gameOnePictureView;
+        break;
 
-          updateState(state, isCorrect);
-        }
-      };
-      break;
+      case `twoPicture`:
+        const gameTwoPictureView = new GameTwoPictureView(this.model.state);
 
-    case `threePicture`:
-      const gameThreePictureView = new GameThreePictureView(state);
-      gameContainerElement.appendChild(gameThreePictureView.element);
+        gameTwoPictureView.onFormChange = (q1Inputs, q2Inputs) => {
+          const answer1 = getRadioInputValue(q1Inputs);
+          const answer2 = getRadioInputValue(q2Inputs);
 
-      gameThreePictureView.onFormClick = (target) => {
-        let isCorrect = target.src === currentQuestion.answers[0];
+          if (answer1 && answer2) {
+            let isCorrect = true;
 
-        updateState(state, isCorrect);
-      };
-      break;
+            if (answer1 !== currentQuestion.answers[0] || answer2 !== currentQuestion.answers[1]) {
+              isCorrect = false;
+            }
+
+            this.updateState(isCorrect);
+          }
+        };
+        view = gameTwoPictureView;
+        break;
+
+      case `threePicture`:
+        const gameThreePictureView = new GameThreePictureView(this.model.state);
+
+        gameThreePictureView.onFormClick = (target) => {
+          let isCorrect = target.src === currentQuestion.answers[0];
+
+          this.updateState(isCorrect);
+        };
+        view = gameThreePictureView;
+        break;
+    }
+
+    return view;
   }
 
-  gameContainerElement.appendChild(gameFooterView.element);
-
-  setBackToGreetingsElement(gameHeaderView.element);
-};
-
-const startGame = () => {
-  const game = JSON.parse(JSON.stringify(INITIAL_STATE));
-
-  showScreen(gameContainerElement);
-  updateGame(game);
-};
-
-const updateState = (state, isCorrect) => {
-  let newState = changeLevel(state, state.level + 1);
-
-  if (!isCorrect) {
-    newState = reduceNumberOfLives(newState);
+  updateHeader() {
+    const header = new HeaderView(this.model.state.time, this.model.state.lives);
+    this.gameContainerElement.replaceChild(header.element, this.header.element);
+    this.header = header;
   }
 
-  setLevelStat(state, isCorrect, TIME);
-  updateGame(newState);
-};
+  updateGameContent() {
+    const level = this.getLevelView();
+    this.gameContainerElement.replaceChild(level.element, this.level.element);
+    this.level = level;
+  }
 
-export default startGame;
+  updateFooter() {
+    const footer = new GameFooterView(this.model.state);
+    this.gameContainerElement.replaceChild(footer.element, this.footer.element);
+    this.footer = footer;
+  }
+}
