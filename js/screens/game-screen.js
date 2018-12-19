@@ -21,8 +21,7 @@ const checkOneOfThree = (id, answers) => {
   let isCorrect = true;
 
   answers.forEach((answer, index) => {
-    if (index !== id) {
-      console.log(index + ` ` + id);
+    if (+index !== +id) {
 
       if (userAnswer === answer.type) {
         isCorrect = false;

@@ -11,13 +11,14 @@ export default class GameModel {
     this.restart();
   }
 
-  get state() {
-    return this._state;
-  }
-
   restart() {
     this._state = JSON.parse(JSON.stringify(INITIAL_STATE));
     this._state = Object.assign({}, this._state, {questions: this.gameData});
+    this._state = Object.assign({}, this._state, {username: this.playerName});
+  }
+
+  get state() {
+    return this._state;
   }
 
   changeLevel() {
