@@ -10,6 +10,29 @@ const ONE_SECOND = 1000;
 const QUARTER_SECOND = 250;
 const BLINK_TIME = 5;
 
+const QuestionType = {
+  TWO_OF_TWO: `two-of-two`,
+  TINDER_LIKE: `tinder-like`,
+  ONE_OF_THREE: `one-of-three`
+};
+
+const checkOneOfThree = (id, answers) => {
+  const userAnswer = answers[id].type;
+  let isCorrect = true;
+
+  answers.forEach((answer, index) => {
+    if (index !== id) {
+      console.log(index + ` ` + id);
+
+      if (userAnswer === answer.type) {
+        isCorrect = false;
+      }
+    }
+  });
+
+  return isCorrect;
+};
+
 export default class GameScreen {
   constructor(model) {
     this.model = model;
@@ -90,25 +113,25 @@ export default class GameScreen {
 
   getLevelView() {
     const currentQuestion = this.model.state.questions[this.model.state.level - 1];
-    const templateName = currentQuestion.template;
+    const templateName = currentQuestion.type;
     let view;
 
     switch (templateName) {
-      case `onePicture`:
+      case QuestionType.TINDER_LIKE:
         const gameOnePictureView = new GameOnePictureView(this.model.state);
 
         gameOnePictureView.onFormChange = (gameAnswers) => {
           const answer = getRadioInputValue(gameAnswers);
 
           if (answer) {
-            let isCorrect = answer === currentQuestion.answers[0];
+            let isCorrect = answer === currentQuestion.answers[0].type;
             this.updateState(isCorrect);
           }
         };
         view = gameOnePictureView;
         break;
 
-      case `twoPicture`:
+      case QuestionType.TWO_OF_TWO:
         const gameTwoPictureView = new GameTwoPictureView(this.model.state);
 
         gameTwoPictureView.onFormChange = (q1Inputs, q2Inputs) => {
@@ -118,7 +141,7 @@ export default class GameScreen {
           if (answer1 && answer2) {
             let isCorrect = true;
 
-            if (answer1 !== currentQuestion.answers[0] || answer2 !== currentQuestion.answers[1]) {
+            if (answer1 !== currentQuestion.answers[0].type || answer2 !== currentQuestion.answers[1].type) {
               isCorrect = false;
             }
 
@@ -128,11 +151,11 @@ export default class GameScreen {
         view = gameTwoPictureView;
         break;
 
-      case `threePicture`:
+      case QuestionType.ONE_OF_THREE:
         const gameThreePictureView = new GameThreePictureView(this.model.state);
 
         gameThreePictureView.onFormClick = (target) => {
-          let isCorrect = target.src === currentQuestion.answers[0];
+          let isCorrect = checkOneOfThree(target.dataset.index, currentQuestion.answers);
 
           this.updateState(isCorrect);
         };

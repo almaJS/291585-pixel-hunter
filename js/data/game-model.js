@@ -6,7 +6,7 @@ import reduceCountdown from './reduce-countdown.js';
 
 export default class GameModel {
   constructor(gameData, playerName) {
-    this.model = gameData;
+    this.gameData = gameData;
     this.playerName = playerName;
     this.restart();
   }
@@ -17,6 +17,7 @@ export default class GameModel {
 
   restart() {
     this._state = JSON.parse(JSON.stringify(INITIAL_STATE));
+    this._state = Object.assign({}, this._state, {questions: this.gameData});
   }
 
   changeLevel() {
