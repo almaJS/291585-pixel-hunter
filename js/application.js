@@ -49,7 +49,7 @@ export default class Application {
       .then((response) => response.json())
       .then((data) => {
         gameData = data;
-        Promise.all(gameData.reduce((promises, level) => {
+        return Promise.all(gameData.reduce((promises, level) => {
           level.answers.forEach((answer) => {
             promises.push(loadImage(answer));
             return promises;
