@@ -50,10 +50,7 @@ export default class Application {
       .then((data) => {
         gameData = data;
         return Promise.all(gameData.reduce((promises, level) => {
-          level.answers.forEach((answer) => {
-            promises.push(loadImage(answer));
-            return promises;
-          });
+          level.answers.forEach((answer) => promises.push(loadImage(answer)));
           return promises;
         }, []));
       })
