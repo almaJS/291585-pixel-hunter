@@ -11,16 +11,16 @@ export default class GameOnePictureView extends AbstractView {
 
     return `
       <section class="game">
-      <p class="game__task">${currentQuestion.text}</p>
+      <p class="game__task">${currentQuestion.question}</p>
       <form class="game__content  game__content--wide">
         <div class="game__option">
-          <img src="${currentQuestion.pictures[0]}" alt="Option 1" width="705" height="455">
+          <img src="${currentQuestion.answers[0].image.url}" alt="Option 1" width="705" height="455">
           <label class="game__answer  game__answer--photo">
             <input class="visually-hidden" name="question1" type="radio" value="photo">
             <span>Фото</span>
           </label>
           <label class="game__answer  game__answer--paint">
-            <input class="visually-hidden" name="question1" type="radio" value="paint">
+            <input class="visually-hidden" name="question1" type="radio" value="painting">
             <span>Рисунок</span>
           </label>
         </div>

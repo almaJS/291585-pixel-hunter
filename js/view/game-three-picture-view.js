@@ -11,16 +11,16 @@ export default class GameThreePictureView extends AbstractView {
 
     return `
       <section class="game">
-      <p class="game__task">${currentQuestion.text}</p>
+      <p class="game__task">${currentQuestion.question}</p>
       <form class="game__content  game__content--triple">
         <div class="game__option">
-          <img src="${currentQuestion.pictures[0]}" alt="Option 1" width="304" height="455">
+          <img src="${currentQuestion.answers[0].image.url}" data-index="0" alt="Option 1" width="304" height="455">
         </div>
         <div class="game__option  game__option--selected">
-          <img src="${currentQuestion.pictures[1]}" alt="Option 2" width="304" height="455">
+          <img src="${currentQuestion.answers[1].image.url}" data-index="1" alt="Option 2" width="304" height="455">
         </div>
         <div class="game__option">
-          <img src="${currentQuestion.pictures[2]}" alt="Option 3" width="304" height="455">
+          <img src="${currentQuestion.answers[2].image.url}" data-index="2" alt="Option 3" width="304" height="455">
         </div>
       </form>`;
   }

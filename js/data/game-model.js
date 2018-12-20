@@ -5,17 +5,19 @@ import setLevelStat from './set-level-stat.js';
 import reduceCountdown from './reduce-countdown.js';
 
 export default class GameModel {
-  constructor(playerName) {
+  constructor(gameData, playerName) {
+    this.gameData = gameData;
     this.playerName = playerName;
     this.restart();
   }
 
-  get state() {
-    return this._state;
-  }
-
   restart() {
     this._state = JSON.parse(JSON.stringify(INITIAL_STATE));
+    this._state = Object.assign({}, this._state, {questions: this.gameData, username: this.playerName});
+  }
+
+  get state() {
+    return this._state;
   }
 
   changeLevel() {
