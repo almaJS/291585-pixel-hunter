@@ -49,13 +49,20 @@ export default class Application {
       .then((response) => response.json())
       .then((data) => {
         gameData = data;
-        let arrayOfImages = [];
-        gameData.forEach((level) => {
-          level.answers.forEach((answer) => arrayOfImages.push(loadImage(answer)));
-        });
-        return arrayOfImages;
+        // let arrayOfImages = gameData.reduce((acc, level) => {
+        //   level.answers.forEach((answer) => {
+        //     acc.push(loadImage(answer));
+        //   });
+        // }, []);
+        // return Promise.all(arrayOfImages);
+        Promise.all(gameData.reduce((promises, level) => {
+          level.answers.forEach((answer) => {
+            promises.push(loadImage(answer));
+            return promises;
+          });
+          return promises;
+        }, []));
       })
-      .then((imagePromises) => Promise.all(imagePromises))
       .then(Application.showGreeting)
       .catch(Application.showModalError);
   }

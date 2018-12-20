@@ -13,8 +13,7 @@ export default class GameModel {
 
   restart() {
     this._state = JSON.parse(JSON.stringify(INITIAL_STATE));
-    this._state = Object.assign({}, this._state, {questions: this.gameData});
-    this._state = Object.assign({}, this._state, {username: this.playerName});
+    this._state = Object.assign({}, this._state, {questions: this.gameData, username: this.playerName});
   }
 
   get state() {

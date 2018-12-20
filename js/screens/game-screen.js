@@ -18,18 +18,17 @@ const QuestionType = {
 
 const checkOneOfThree = (id, answers) => {
   const userAnswer = answers[id].type;
-  let isCorrect = true;
 
-  answers.forEach((answer, index) => {
-    if (+index !== +id) {
+  return answers.reduce((acc, answer, index) => {
+    if (index !== +id) {
 
       if (userAnswer === answer.type) {
-        isCorrect = false;
+        return false;
       }
     }
-  });
 
-  return isCorrect;
+    return acc;
+  }, true);
 };
 
 export default class GameScreen {
