@@ -56,7 +56,7 @@ export default class GameScreen {
   }
 
   stopGame() {
-    Application.showStat(this.model.state);
+    Application.showStat(this.model.state, this.model.playerName);
   }
 
   stopTimer() {

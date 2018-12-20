@@ -1,26 +1,28 @@
+import gamePoints from './game-points.js';
+
 export default (state) => {
   const rightAnswers = state.stats.filter((statValue) => statValue.result);
   const rightCounter = rightAnswers.length;
-  const fastCounter = rightAnswers.filter((statValue) => statValue.time < state.fastTime).length;
-  const slowCounter = rightAnswers.filter((statValue) => statValue.time > state.slowTime).length;
+  const fastCounter = rightAnswers.filter((statValue) => statValue.time < gamePoints.fastTime).length;
+  const slowCounter = rightAnswers.filter((statValue) => statValue.time > gamePoints.slowTime).length;
 
   const result = {
-    isWinner: state.questions.length === state.stats.length,
+    isWinner: state.numberOfQuestions === state.stats.length,
     right: {
       count: rightCounter,
-      points: rightCounter * state.normalPoints
+      points: rightCounter * gamePoints.normalPoints
     },
     fast: {
       count: fastCounter,
-      points: fastCounter * state.fastPoints
+      points: fastCounter * gamePoints.fastPoints
     },
     slow: {
       count: slowCounter,
-      points: slowCounter * state.slowPoints
+      points: slowCounter * gamePoints.slowPoints
     },
     lives: {
       count: state.lives,
-      points: state.lives * state.lifePoints
+      points: state.lives * gamePoints.lifePoints
     },
   };
 

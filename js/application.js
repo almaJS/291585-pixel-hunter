@@ -6,9 +6,7 @@ import GameModel from "./data/game-model.js";
 import StatScreen from "./screens/stat-screen.js";
 import ConfirmScreen from "./modals/confirm-screen.js";
 import ErrorScreen from "./modals/error-screen.js";
-import {resize} from './data/resize.js';
-
-const LOAD_URL = `https://es.dump.academy/pixel-hunter/questions`;
+import Loader from "./loader.js";
 
 const mainElement = document.querySelector(`#main`);
 
@@ -17,23 +15,12 @@ const showScreen = (element) => {
   mainElement.appendChild(element);
 };
 
-const checkFetchStatus = (response) => {
-  if (response.status >= 200 && response.status < 300) {
-    return response;
-  } else {
-    throw new Error(`${response.status}`);
-  }
-};
-
 const loadImage = (answer) => {
   return new Promise((onLoad, onError) => {
     const image = new Image();
     answer.image.preloadedImage = image;
     image.onload = () => onLoad(image);
     image.onerror = () => onError();
-    const imageSizes = resize({width: 200, height: 300}, {width: answer.image.width, height: answer.image.height});
-    image.width = imageSizes.width;
-    image.height = imageSizes.height;
     image.src = answer.image.url;
   });
 };
@@ -44,9 +31,7 @@ export default class Application {
   static showIntro() {
     const introView = new IntroView();
     showScreen(introView.element);
-    window.fetch(LOAD_URL)
-      .then(checkFetchStatus)
-      .then((response) => response.json())
+    Loader.loadData()
       .then((data) => {
         gameData = data;
         return Promise.all(gameData.reduce((promises, level) => {
@@ -74,9 +59,11 @@ export default class Application {
     gameScreen.startGame();
   }
 
-  static showStat(state) {
-    const statScreen = new StatScreen(state);
-    showScreen(statScreen.element);
+  static showStat(state, playerName) {
+    Loader.saveResults(state, playerName)
+      .then(() => Loader.loadResults(playerName))
+      .then((data) => new StatScreen(data))
+      .then((statScreen) => showScreen(statScreen.element));
   }
 
   static showModalConfirm() {
