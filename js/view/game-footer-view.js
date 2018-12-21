@@ -1,7 +1,8 @@
-import AbstractView from "./abstract-view";
+import AbstractView from "./abstract-view.js";
+import gamePoints from "../data/game-points.js";
 
 const getStatsTemplate = (state) => {
-  const numberOfQuestions = state.questions.length;
+  const numberOfQuestions = state.numberOfQuestions;
   let stats = [];
 
   for (let i = 0; i < numberOfQuestions; i++) {
@@ -12,11 +13,12 @@ const getStatsTemplate = (state) => {
       if (state.stats[i].result) {
         extraClass = `correct`;
 
-        if (state.stats[i].time < state.fastTime) {
+        if (state.stats[i].time < gamePoints.fastTime) {
           extraClass = `fast`;
-        } else if (state.stats[i].time > state.slowTime) {
+        } else if (state.stats[i].time > gamePoints.slowTime) {
           extraClass = `slow`;
         }
+
       } else {
         extraClass = `wrong`;
       }

@@ -1,5 +1,6 @@
 import AbstractView from "./abstract-view.js";
 import GameFooterView from './game-footer-view.js';
+import getResult from '../data/get-result.js';
 
 const renderTableHeader = (result) => {
   let template;
@@ -67,21 +68,18 @@ const renderTableTotal = (result) => {
   return template;
 };
 
-const renderResultTable = (state, result) => {
+const renderResultTable = (state, result, i) => {
   const gameFooterView = new GameFooterView(state);
   const template = `
-    <table class="result__table">
       <tr>
-        <td class="result__number">1.</td>
+        <td class="result__number">${i + 1}.</td>
         <td colspan="2">
           ${gameFooterView.template}
         </td>
         ${renderTableHeader(result)}
 
       ${renderTableStat(result)}
-      ${renderTableTotal(result)}
-    </table>`;
-
+      ${renderTableTotal(result)}`;
   return template;
 };
 
@@ -90,18 +88,19 @@ const renderTitle = (result) => {
 };
 
 export default class StatsView extends AbstractView {
-  constructor(state, gameResult) {
+  constructor(state) {
     super();
     this.state = state;
-    this.gameResult = gameResult;
   }
 
   get template() {
 
     return `
       <section class="result">
-        <h2 class="result__title">${renderTitle(this.gameResult)}</h2>
-          ${renderResultTable(this.state, this.gameResult)}
+        <h2 class="result__title">${renderTitle(getResult(this.state[this.state.length - 1]))}</h2>
+        <table class="result__table">
+          ${this.state.reverse().map((game, i) => renderResultTable(game, getResult(game), i)).join(``)}
+        </table>
       </section>`;
   }
 }
