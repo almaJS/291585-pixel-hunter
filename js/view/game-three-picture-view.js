@@ -1,4 +1,7 @@
 import AbstractView from './abstract-view.js';
+import {resize} from '../data/resize.js';
+
+const FrameSizes = {WIDTH: 304, HEIGHT: 455};
 
 export default class GameThreePictureView extends AbstractView {
   constructor(state) {
@@ -13,15 +16,12 @@ export default class GameThreePictureView extends AbstractView {
       <section class="game">
       <p class="game__task">${currentQuestion.question}</p>
       <form class="game__content  game__content--triple">
-        <div class="game__option">
-          <img src="${currentQuestion.answers[0].image.url}" data-index="0" alt="Option 1" width="304" height="455">
-        </div>
-        <div class="game__option  game__option--selected">
-          <img src="${currentQuestion.answers[1].image.url}" data-index="1" alt="Option 2" width="304" height="455">
-        </div>
-        <div class="game__option">
-          <img src="${currentQuestion.answers[2].image.url}" data-index="2" alt="Option 3" width="304" height="455">
-        </div>
+        ${currentQuestion.answers.map((answer, index) => {
+    const ImageSizes = resize(FrameSizes, {width: answer.image.preloadedImage.width, height: answer.image.preloadedImage.height});
+    return `<div class="game__option" data-index="${index}">
+            <img src="${answer.image.preloadedImage.src}" alt="Option ${index + 1}" width="${ImageSizes.width}" height="${ImageSizes.height}">
+            </div>`;
+  }).join(``)}
       </form>`;
   }
 
@@ -32,7 +32,7 @@ export default class GameThreePictureView extends AbstractView {
       let target = evt.target;
 
       while (target !== form) {
-        if (target.tagName === `IMG`) {
+        if (target.classList.contains(`game__option`)) {
           this.onFormClick(target);
         }
 

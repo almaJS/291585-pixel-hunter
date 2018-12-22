@@ -27,26 +27,26 @@ const createTestForFrame = (frame) => {
     createTest(expected, 1);
   };
 
-  describe(`Resize into frame: ${frame.width}x${frame.height}`, () => {
+  describe(`Resize into frame: ${frame.WIDTH}x${frame.HEIGHT}`, () => {
 
     describe(`when "width === height"`, () => {
-      sequence({width: frame.width, height: frame.height});
+      sequence({width: frame.WIDTH, height: frame.HEIGHT});
     });
 
     describe(`when "width > height"`, () => {
-      sequence({width: frame.width, height: Math.floor(frame.height / 2)});
+      sequence({width: frame.WIDTH, height: Math.floor(frame.HEIGHT / 2)});
     });
 
     describe(`when "width < height"`, () => {
-      sequence({width: Math.floor(frame.width / 2), height: frame.height});
+      sequence({width: Math.floor(frame.WIDTH / 2), height: frame.HEIGHT});
     });
 
   });
 };
 
-createTestForFrame({width: 256, height: 256});
-createTestForFrame({width: 256, height: 128});
+createTestForFrame({WIDTH: 256, HEIGHT: 256});
+createTestForFrame({WIDTH: 256, HEIGHT: 128});
 
-createTestForFrame({width: 468, height: 458});
-createTestForFrame({width: 705, height: 455});
-createTestForFrame({width: 304, height: 455});
+createTestForFrame({WIDTH: 468, HEIGHT: 458});
+createTestForFrame({WIDTH: 705, HEIGHT: 455});
+createTestForFrame({WIDTH: 304, HEIGHT: 455});

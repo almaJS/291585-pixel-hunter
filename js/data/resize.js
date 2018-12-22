@@ -1,9 +1,9 @@
 export const resize = (frame, image) => {
-  if (image.width <= frame.width && image.height <= frame.height) {
+  if (image.width <= frame.WIDTH && image.height <= frame.HEIGHT) {
     return image;
   }
 
-  const shrink = Math.max(ratio(image.width, frame.width), ratio(image.height, frame.height));
+  const shrink = Math.max(ratio(image.width, frame.WIDTH), ratio(image.height, frame.HEIGHT));
 
   return {width: image.width / shrink, height: image.height / shrink};
 };
