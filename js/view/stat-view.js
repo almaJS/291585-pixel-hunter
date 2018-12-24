@@ -3,20 +3,16 @@ import GameFooterView from './game-footer-view.js';
 import getResult from '../data/get-result.js';
 
 const renderTableHeader = (result) => {
-  let template;
-
   if (result.isWinner) {
-    template = `
+    return `
         <td class="result__points">× 100</td>
         <td class="result__total">${result.right.points}</td>
         </tr>`;
   } else {
-    template = `
+    return `
       <td class="result__points"></td>
     `;
   }
-
-  return template;
 };
 
 const renderTableTemplate = (count, points, type) => {
@@ -55,17 +51,15 @@ const renderTableStat = (result) => {
 };
 
 const renderTableTotal = (result) => {
-  let template = ` <td class="result__total  result__total--final">fail</td>`;
-
   if (result.isWinner) {
-    template = `
+    return `
       <tr>
         <td colspan="5" class="result__total  result__total--final">${result.total}</td>
       </tr>
     `;
   }
 
-  return template;
+  return `<td class="result__total  result__total--final">fail</td>`;
 };
 
 const renderResultTable = (state, result, i) => {

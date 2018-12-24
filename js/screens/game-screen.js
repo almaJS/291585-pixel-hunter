@@ -33,10 +33,10 @@ const checkOneOfThree = (id, answers) => {
 
 export default class GameScreen {
   constructor(model) {
-    this.model = model;
+    this._model = model;
     this.gameContainerElement = getElement();
-    this.header = new HeaderView(this.model.state.time, this.model.state.lives);
-    this.footer = new GameFooterView(this.model.state);
+    this.header = new HeaderView(this._model.state.time, this._model.state.lives);
+    this.footer = new GameFooterView(this._model.state);
     this.level = this.getLevelView();
     this.gameContainerElement.appendChild(this.header.element);
     this.gameContainerElement.appendChild(this.level.element);
@@ -51,12 +51,12 @@ export default class GameScreen {
   }
 
   startGame() {
-    this.model.restart();
+    this._model.restart();
     this.updateGame();
   }
 
   stopGame() {
-    Application.showStat(this.model.state, this.model.playerName);
+    Application.showStat(this._model.state, this._model.playerName);
   }
 
   stopTimer() {
@@ -66,21 +66,21 @@ export default class GameScreen {
   }
 
   checkTimer() {
-    if (this.model.state.time <= BLINK_TIME && !this._blinkInterval) {
+    if (this._model.state.time <= BLINK_TIME && !this._blinkInterval) {
 
       this._blinkInterval = setInterval(() => {
         this.header.blink();
       }, QUARTER_SECOND);
     }
 
-    if (this.model.isEndOfTime()) {
+    if (this._model.isEndOfTime()) {
       this.updateState();
     }
   }
 
   updateGame() {
 
-    if (this.model.isEndOfGame()) {
+    if (this._model.isEndOfGame()) {
       this.stopGame();
       return;
     }
@@ -90,7 +90,7 @@ export default class GameScreen {
     this.updateFooter();
 
     this._interval = setInterval(() => {
-      this.model.tick();
+      this._model.tick();
       this.updateHeader();
       this.checkTimer();
     }, ONE_SECOND);
@@ -99,24 +99,23 @@ export default class GameScreen {
   updateState(isCorrect) {
     this.stopTimer();
 
-    this.model.setLevelStat(isCorrect, this.model.state.time);
-    this.model.changeLevel(this.model.state, this.model.state.level + 1);
+    this._model.setLevelStat(isCorrect, this._model.state.time);
+    this._model.changeLevel(this._model.state, this._model.state.level + 1);
 
     if (!isCorrect) {
-      this.model.reduceNumberOfLives();
+      this._model.reduceNumberOfLives();
     }
 
     this.updateGame();
   }
 
   getLevelView() {
-    const currentQuestion = this.model.state.questions[this.model.state.level - 1];
+    const currentQuestion = this._model.state.questions[this._model.state.level - 1];
     const templateName = currentQuestion.type;
-    let view;
 
     switch (templateName) {
       case QuestionType.TINDER_LIKE:
-        const gameOnePictureView = new GameOnePictureView(this.model.state);
+        const gameOnePictureView = new GameOnePictureView(this._model.state);
 
         gameOnePictureView.onFormChange = (gameAnswers) => {
           const answer = getRadioInputValue(gameAnswers);
@@ -126,11 +125,10 @@ export default class GameScreen {
             this.updateState(isCorrect);
           }
         };
-        view = gameOnePictureView;
-        break;
+        return gameOnePictureView;
 
       case QuestionType.TWO_OF_TWO:
-        const gameTwoPictureView = new GameTwoPictureView(this.model.state);
+        const gameTwoPictureView = new GameTwoPictureView(this._model.state);
 
         gameTwoPictureView.onFormChange = (q1Inputs, q2Inputs) => {
           const answer1 = getRadioInputValue(q1Inputs);
@@ -146,26 +144,24 @@ export default class GameScreen {
             this.updateState(isCorrect);
           }
         };
-        view = gameTwoPictureView;
-        break;
+        return gameTwoPictureView;
 
       case QuestionType.ONE_OF_THREE:
-        const gameThreePictureView = new GameThreePictureView(this.model.state);
+        const gameThreePictureView = new GameThreePictureView(this._model.state);
 
         gameThreePictureView.onFormClick = (target) => {
           let isCorrect = checkOneOfThree(target.dataset.index, currentQuestion.answers);
 
           this.updateState(isCorrect);
         };
-        view = gameThreePictureView;
-        break;
+        return gameThreePictureView;
     }
 
-    return view;
+    return -1;
   }
 
   updateHeader() {
-    const header = new HeaderView(this.model.state.time, this.model.state.lives);
+    const header = new HeaderView(this._model.state.time, this._model.state.lives);
     this.gameContainerElement.replaceChild(header.element, this.header.element);
     this.header = header;
   }
@@ -177,7 +173,7 @@ export default class GameScreen {
   }
 
   updateFooter() {
-    const footer = new GameFooterView(this.model.state);
+    const footer = new GameFooterView(this._model.state);
     this.gameContainerElement.replaceChild(footer.element, this.footer.element);
     this.footer = footer;
   }
