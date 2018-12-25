@@ -12,25 +12,13 @@ export const showScreen = (element) => {
 };
 
 export const getRadioInputValue = (elements) => {
-  let radioValue = false;
+  const radio = Array.from(elements).find((element) => element.checked === true);
 
-  elements.forEach((element) => {
-    if (element.checked) {
-      radioValue = element.value;
-    }
-  });
-
-  return radioValue;
+  return radio ? radio.value : false;
 };
 
 export const getRadioInputsState = (elements) => {
-  let isRadioChecked = false;
+  const radio = Array.from(elements).find((element) => element.checked === true);
 
-  elements.forEach((element) => {
-    if (element.checked) {
-      isRadioChecked = true;
-    }
-  });
-
-  return isRadioChecked;
+  return radio ? radio.checked : false;
 };
