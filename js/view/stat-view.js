@@ -8,11 +8,11 @@ const renderTableHeader = (result) => {
         <td class="result__points">× 100</td>
         <td class="result__total">${result.right.points}</td>
         </tr>`;
-  } else {
-    return `
-      <td class="result__points"></td>
-    `;
   }
+
+  return `
+    <td class="result__points"></td>
+  `;
 };
 
 const renderTableTemplate = (count, points, type) => {

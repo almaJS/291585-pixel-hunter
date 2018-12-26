@@ -37,7 +37,7 @@ export default class GameScreen {
     this.gameContainerElement = getElement();
     this.header = new HeaderView(this._model.state.time, this._model.state.lives);
     this.footer = new GameFooterView(this._model.state);
-    this.level = this.getLevelView();
+    this.level = this._getLevelView();
     this.gameContainerElement.appendChild(this.header.element);
     this.gameContainerElement.appendChild(this.level.element);
     this.gameContainerElement.appendChild(this.footer.element);
@@ -52,20 +52,20 @@ export default class GameScreen {
 
   startGame() {
     this._model.restart();
-    this.updateGame();
+    this._updateGame();
   }
 
   stopGame() {
     Application.showStat(this._model.state, this._model.playerName);
   }
 
-  stopTimer() {
+  _stopTimer() {
     clearInterval(this._interval);
     clearInterval(this._blinkInterval);
     this._blinkInterval = null;
   }
 
-  checkTimer() {
+  _checkTimer() {
     if (this._model.state.time <= BLINK_TIME && !this._blinkInterval) {
 
       this._blinkInterval = setInterval(() => {
@@ -74,30 +74,30 @@ export default class GameScreen {
     }
 
     if (this._model.isEndOfTime()) {
-      this.updateState();
+      this._updateState();
     }
   }
 
-  updateGame() {
+  _updateGame() {
 
     if (this._model.isEndOfGame()) {
       this.stopGame();
       return;
     }
 
-    this.updateHeader();
-    this.updateGameContent();
-    this.updateFooter();
+    this._updateHeader();
+    this._updateGameContent();
+    this._updateFooter();
 
     this._interval = setInterval(() => {
       this._model.tick();
-      this.updateHeader();
-      this.checkTimer();
+      this._updateHeader();
+      this._checkTimer();
     }, ONE_SECOND);
   }
 
-  updateState(isCorrect) {
-    this.stopTimer();
+  _updateState(isCorrect) {
+    this._stopTimer();
 
     this._model.setLevelStat(isCorrect, this._model.state.time);
     this._model.changeLevel(this._model.state, this._model.state.level + 1);
@@ -106,10 +106,10 @@ export default class GameScreen {
       this._model.reduceNumberOfLives();
     }
 
-    this.updateGame();
+    this._updateGame();
   }
 
-  getLevelView() {
+  _getLevelView() {
     const currentQuestion = this._model.state.questions[this._model.state.level - 1];
     const templateName = currentQuestion.type;
 
@@ -122,7 +122,7 @@ export default class GameScreen {
 
           if (answer) {
             let isCorrect = answer === currentQuestion.answers[0].type;
-            this.updateState(isCorrect);
+            this._updateState(isCorrect);
           }
         };
         return gameOnePictureView;
@@ -141,7 +141,7 @@ export default class GameScreen {
               isCorrect = false;
             }
 
-            this.updateState(isCorrect);
+            this._updateState(isCorrect);
           }
         };
         return gameTwoPictureView;
@@ -152,7 +152,7 @@ export default class GameScreen {
         gameThreePictureView.onFormClick = (target) => {
           let isCorrect = checkOneOfThree(target.dataset.index, currentQuestion.answers);
 
-          this.updateState(isCorrect);
+          this._updateState(isCorrect);
         };
         return gameThreePictureView;
     }
@@ -160,19 +160,19 @@ export default class GameScreen {
     return -1;
   }
 
-  updateHeader() {
+  _updateHeader() {
     const header = new HeaderView(this._model.state.time, this._model.state.lives);
     this.gameContainerElement.replaceChild(header.element, this.header.element);
     this.header = header;
   }
 
-  updateGameContent() {
-    const level = this.getLevelView();
+  _updateGameContent() {
+    const level = this._getLevelView();
     this.gameContainerElement.replaceChild(level.element, this.level.element);
     this.level = level;
   }
 
-  updateFooter() {
+  _updateFooter() {
     const footer = new GameFooterView(this._model.state);
     this.gameContainerElement.replaceChild(footer.element, this.footer.element);
     this.footer = footer;
