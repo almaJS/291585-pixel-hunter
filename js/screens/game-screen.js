@@ -55,7 +55,7 @@ export default class GameScreen {
     this._updateGame();
   }
 
-  stopGame() {
+  _stopGame() {
     Application.showStat(this._model.state, this._model.playerName);
   }
 
@@ -81,7 +81,7 @@ export default class GameScreen {
   _updateGame() {
 
     if (this._model.isEndOfGame()) {
-      this.stopGame();
+      this._stopGame();
       return;
     }
 
